@@ -16,51 +16,6 @@ stored.
 4. Read the IP address which is send by the client.
 5. Map the IP address with its MAC address and return the MAC address to client.
 P
-## PROGRAM - ARP
-server
-```
-import socket
-s = socket.socket()
-s.bind(('localhost', 8000))
-s.listen(5)
-print("Server is listening...")
-c, addr = s.accept()
-print(f"Connection established with {addr}")
-address = {
-    "192.168.1.5": "3c:22:fb:1a:9c:4e",
-    "192.168.1.10": "08:92:4c:ef:21:7b",
-}
-while True:
-    ip = c.recv(1024).decode()
-    if not ip or ip.lower() == "exit":
-        print("Client disconnected.")
-        break
-    try:
-        mac = address[ip]  # Get the MAC address for the IP
-        print(f"IP: {ip} -> MAC: {mac}")
-        c.send(mac.encode())
-    except KeyError:
-        print(f"IP: {ip} not found in ARP table.")
-        c.send("MAC Address Not Found".encode())
-c.close()
-```
-client
-```
-import socket
-c = socket.socket()
-c.connect(('localhost', 8000))
-while True:
-    ip = input("Enter IP address to find MAC (or type 'exit' to quit): ")
-    c.send(ip.encode())
-    if ip.lower() == "exit":
-        break
-    mac = c.recv(1024).decode()
-    print(f"MAC Address for {ip}: {mac}")
-c.close()
-```
-## OUPUT - ARP
-<img width="1917" height="334" alt="490366680-a37f682d-cce0-4f40-9d5c-4775df05abb7" src="https://github.com/user-attachments/assets/6c60f8b5-75b6-43d9-9740-7bc2b1c981d3" />
-
 ## PROGRAM - RARP
 server
 ```
